@@ -15,6 +15,14 @@ namespace gyakorlat_3
         public Form1()
         {
             InitializeComponent();
+            label1.Text = Resource.LastName;
+            label2.Text = Resource.FirstName;
+            button1.Text = Resource.Add;
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
