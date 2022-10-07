@@ -11,6 +11,9 @@ using System.Windows.Forms;
 
 namespace gyakorlat_3
 {
+
+    
+
     public partial class Form1 : Form
     {
         BindingList<User> users = new BindingList<User>();
