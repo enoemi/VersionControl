@@ -16,23 +16,28 @@ namespace gyakorlat_6
         public Form1()
         {
             InitializeComponent();
-            GetExchangeRatesRequestBody();
+            GetExchangeRates();
         }
 
-        
-
-        var mnbService = new MNBArfolyamServiceSoapClient();
-
-        var request = new GetExchangeRatesRequestBody()
+        private void GetExchangeRates()
         {
-            currencyNames = "EUR",
-            startDate = "2020-01-01",
-            endDate = "2020-06-30"
-        };
+            var mnbService = new MNBArfolyamServiceSoapClient();
 
-        var response = MnbService.GetExchangeRates(request);
+            var request = new GetExchangeRatesRequestBody()
+            {
+                currencyNames = "EUR",
+                startDate = "2020-01-01",
+                endDate = "2020-06-30"
+            };
 
-        var result = response.GetExchangeRatesResult;
+            var response = mnbService.GetExchangeRates(request);
+
+            var result = response.GetExchangeRatesResult;
+        }
+
+
+
+        
 
         
     }
