@@ -7,11 +7,12 @@ using gyakorlat_7.Abstractions;
 
 namespace gyakorlat_7.Entities
 {
-    public class BallFactory : IToyFactory
+    class CarFactory : IToyFactory
     {
-        public Toy CreateNew()
+
+        Toy IToyFactory.CreateNew()
         {
-            return new Ball();
+            return new Car();
         }
     }
 }

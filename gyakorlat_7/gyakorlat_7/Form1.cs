@@ -7,39 +7,52 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using gyakorlat_7.Entities;
 
 namespace gyakorlat_7
 {
     public partial class Form1 : Form
     {
+       
+
+        private List<Ball> _balls = new List<Ball>();
+
+        private BallFactory _factory;
+        public BallFactory Factory
+        {
+            get { return _factory; }
+            set { _factory = value; }
+        }
+
         public Form1()
         {
             InitializeComponent();
+            Factory = new BallFactory();
         }
 
-        public class Ball : Label
+        private void createTimer_Tick(object sender, EventArgs e)
         {
-            public Ball()
+            var ball = Factory.CreateNew();
+            _balls.Add(ball);
+            ball.Left = -ball.Width;
+            panel1.Controls.Add(ball);
+        }
+
+        private void conveyorTimer_Tick(object sender, EventArgs e)
+        {
+            var maxPosition = 0;
+            foreach (var ball in _balls)
             {
-                AutoSize = false;
-                Width = 50;
-                Height = Width;
-                Paint += Ball_Paint;
+                ball.MoveBall();
+                if (ball.Left > maxPosition)
+                    maxPosition = ball.Left;
             }
 
-            private void Ball_Paint(object sender, PaintEventArgs e)
+            if (maxPosition > 1000)
             {
-                DrawImage(e.Graphics);
-            }
-
-            protected void DrawImage(Graphics g)
-            {
-                g.FillEllipse(new SolidBrush(Color.Blue), 0, 0, Width, Height);
-            }
-
-            public void MoveBall()
-            {
-                Left += 1;
+                var oldestBall = _balls[0];
+                panel1.Controls.Remove(oldestBall);
+                _balls.Remove(oldestBall);
             }
         }
 
