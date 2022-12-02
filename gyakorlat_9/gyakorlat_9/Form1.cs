@@ -15,10 +15,13 @@ namespace gyakorlat_9
     public partial class Form1 : Form
         
     {
-        Random rng = new Random(1234);
+        
         List<Person> Population = new List<Person>();
         List<BirthProbability> BirthProbabilities = new List<BirthProbability>();
         List<DeathProbability> DeathProbabilities = new List<DeathProbability>();
+        List<int> Males = new List<int>();
+        List<int> Females = new List<int>();
+        Random rng = new Random(1234);
         public Form1()
         {
             InitializeComponent();
@@ -31,7 +34,16 @@ namespace gyakorlat_9
                 // Végigmegyünk az összes személyen
                 for (int i = 0; i < Population.Count; i++)
                 {
-                    // Ide jön a szimulációs lépés
+                    SimStep(i, Population[j]);
+
+                    if (Population[j].Gender == Gender.Male)
+                    {
+                        Males.Add(i);
+                    }
+                    else
+                    {
+                        Females.Add(i);
+                    }
                 }
 
                 int nbrOfMales = (from x in Population
@@ -59,7 +71,7 @@ namespace gyakorlat_9
                     {
                         D_gender = (Gender)Enum.Parse(typeof(Gender), line[1]),
                         D_age = int.Parse(line[1]),
-                        D_P = int.Parse(line[2])
+                        D_P = double.Parse(line[2])
                     });
                 }
             }
@@ -80,7 +92,7 @@ namespace gyakorlat_9
                     {
                         Age = int.Parse(line[0]),
                         Children = int.Parse(line[1]),
-                        P = int.Parse(line[2])
+                        P = double.Parse(line[2])
                     });
                 }
             }
@@ -108,7 +120,33 @@ namespace gyakorlat_9
 
             return population;
         }
+        void SimStep(int year, Person person)
+        {
+            if (!person.IsAlive) return;
 
+            int age = year - person.BirthYear;
+
+            double pD = (from x in DeathProbabilities
+                         where x.D_age == age && x.D_gender == person.Gender
+                         select x.D_P).FirstOrDefault();
+
+            if (rng.NextDouble() <= pD) person.IsAlive = false;
+
+            if (person.IsAlive == false || person.Gender == Gender.Male) return;
+
+            double pB = (from x in BirthProbabilities
+                         where x.Age == age && x.Children == person.NbrOfChildren
+                         select x.P).FirstOrDefault();
+
+            if (rng.NextDouble() <= pB)
+            {
+                Person newBorn = new Person();
+                newBorn.Gender = (Gender)rng.Next(1, 3);
+                newBorn.BirthYear = year;
+                newBorn.NbrOfChildren = 0;
+                Population.Add(newBorn);
+            }
+        }
 
 
 
