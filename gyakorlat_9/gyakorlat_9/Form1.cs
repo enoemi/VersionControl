@@ -34,15 +34,15 @@ namespace gyakorlat_9
                 // Végigmegyünk az összes személyen
                 for (int i = 0; i < Population.Count; i++)
                 {
-                    SimStep(i, Population[j]);
+                    SimStep(year, Population[i]);
 
-                    if (Population[j].Gender == Gender.Male)
+                    if (Population[i].Gender == Gender.Male)
                     {
-                        Males.Add(i);
+                        Males.Add(year);
                     }
                     else
                     {
-                        Females.Add(i);
+                        Females.Add(year);
                     }
                 }
 
@@ -146,6 +146,18 @@ namespace gyakorlat_9
                 newBorn.NbrOfChildren = 0;
                 Population.Add(newBorn);
             }
+        }
+
+        
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.InitialDirectory = Application.StartupPath;
+            ofd.Filter = "Comma Seperated Values (*.csv)|*.csv";
+            ofd.DefaultExt = "csv";
+            ofd.AddExtension = true;
+            if (ofd.ShowDialog() != DialogResult.OK) return;
+            textBox1.Text = ofd.FileName;
         }
 
 
